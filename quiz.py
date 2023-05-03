@@ -25,31 +25,74 @@ QUESTIONS = {
     "Egypt","Cameroon","Senegal","Ghana"
     ]
 }
-# restrict number of questions per Quiz
-num_questions = min(Number_of_questions_per_quiz, len(QUESTIONS))
-questions = random.sample(list(QUESTIONS.items()), k=num_questions) #pick the random question from QUESTION list
+# function restrict number of questions per Quiz
+""" prepare_questions take two argument 
+    1. argument is questions
+    2. argument is number of question in current quiz
+    this function return K number of random questions from questions list.
+"""
+def prepare_questions(questions, num_questions):
+    num_questions = min(num_questions, len(questions))
+    return random.sample(list(questions.items()), k=num_questions)
 
-num_correct_answer = 0    
+""" get_answer function take 2 argument 
+    1. argument is question from the quiz and 
+    2nd argumnet is given option of question
+    This function add alphabetical label in given question option
+    and return the user selected label. 
 
-for num, (question,alternatives) in enumerate(questions,start=1):
-    print(f'Question{num}:')
-    print(f'{question}')
-    correct_answer = alternatives[0]
-    #labeled_alternatives variable is used to shuffle the options
-    labeled_alternatives = dict(
-        zip(ascii_lowercase, random.sample(alternatives, k=len(alternatives)))
-    )
+    """
+
+def get_answer(question,alternatives):
+    print(f"{question}?")
+    labeled_alternatives = dict(zip(ascii_lowercase, alternatives))
     for label, alternative in labeled_alternatives.items():
         print(f"  {label}) {alternative}")
 
-    #answer_label = input("\nChoice? ")
-    while ( answer_label := input("\nChoice? ")).lower() not in labeled_alternatives:
+    while (answer_label := input("\nChoice? ")) not in labeled_alternatives:
         print(f"Please answer one of {', '.join(labeled_alternatives)}")
-    answer = labeled_alternatives.get(answer_label.lower())
-    
-    if answer == correct_answer: 
-        num_correct_answer += 1
+
+    return labeled_alternatives[answer_label]
+
+""" 
+ ask_question function takes 2 argument
+ 1st argument is question and 
+ 2nd  argument is question options
+ this function generate the random order of the given options
+ and call the get_answer function which return the user entered answer
+ and print correct if user answer is correct 
+   
+"""
+
+def ask_question(question, alternatives):
+    correct_answer = alternatives[0]
+    ordered_alternatives = random.sample(alternatives, k=len(alternatives))
+
+    answer = get_answer(question, ordered_alternatives)
+    if answer == correct_answer:
         print("⭐ Correct! ⭐")
+        return 1
     else:
-         print(f"The answer is {correct_answer!r}, not {answer!r}")
-print(f"\nYou got {num_correct_answer} correct out of {num} questions")
+        print(f"The answer is {correct_answer!r}, not {answer!r}")
+        return 0
+    
+""" run_quiz() function first call prepare_question function then
+      call ask_question then print 
+       the result of quiz """
+
+def run_quiz():
+    questions = prepare_questions(
+        QUESTIONS, num_questions=Number_of_questions_per_quiz
+    )
+
+    num_correct = 0
+    for num, (question, alternatives) in enumerate(questions, start=1):
+        print(f"\nQuestion {num}:")
+        num_correct += ask_question(question, alternatives)
+
+    print(f"\nYou got {num_correct} correct out of {num} questions")
+
+
+if __name__ == "__main__":
+    run_quiz()
+
