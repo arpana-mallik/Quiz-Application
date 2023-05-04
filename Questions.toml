@@ -1,0 +1,55 @@
+[[questions]]
+question = "Which version of Python is the first with TOML support built in"
+answer = "3.11"
+alternatives = ["3.9", "3.10", "3.12"]
+
+[[questions]]
+question = "What is the national animal of New Zealand?" 
+answer =  "Kiwi"
+alternatives = ["Hedgehog","Lion","Tiger"]
+
+[[questions]]
+question ="Which is the closest planet to the sun?" 
+answer =  "Mercury"
+alternatives = ["Venus","Earth","Jupitar"]
+
+[[questions]]
+question = "In which sport can you score a slam dunk? "
+answer = "Basketball"
+alternatives = ["Cricket",'Rugby',"Tennis"]
+
+[[questions]]
+question = "Halloween is traditionally in which month?"
+answer =  "October"
+alternatives = ["December","April","May"]
+
+[[questions]]
+question = "Which country won the first World Cup Championship? "
+answer = "Uruguay"
+alternatives = ["Brazil","Germany","Argentina"]
+
+[[questions]]
+question = "Which team has won the African Cup of Nations a record 7 times?"
+answer =    "Egypt"
+alternatives = ["Cameroon","Senegal","Ghana"]
+
+[[questions]]
+question = "Which country does not share a border with Romania?"
+answer = "Poland"
+alternatives = ["Ukrain","Bulgaria","Hungary"]
+
+[[questions]]
+question = "What does the Richter scale measure?"
+answer= " Earthquake intensity "
+alternatives = ["Wind Speed","Temperature","Tornado Strength"]
+
+
+
+
+
+
+
+
+
+
+

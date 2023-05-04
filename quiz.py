@@ -1,39 +1,33 @@
 #https://realpython.com/python-quiz-application/#step-1-ask-questions
 from string import ascii_lowercase
 import random
-# variable Number_of_questions_per_quiz used to randomize the questions in quiz.
-Number_of_questions_per_quiz = 5
+
+
 #Quiz Question in Dictonary format 
 # Options are in list format and correct answer will be first option
-QUESTIONS = {
-    "What is the national animal of New Zealand?" :[
-     "Kiwi","Hedgehog","Lion","Tiger"
-    ],
-    "Which is the closest planet to the sun?" :[
-    "Mercury","Venus","Earth","Jupitar"
-    ],
-    "In which sport can you score a slam dunk? ":[
-    "Basketball","Cricket",'Rugby',"Tennis"
-    ],
-    "Halloween is traditionally in which month?":[
-    "October","December","April","May"
-    ],
-    "Which country won the first World Cup Championship? ":[
-    "Uruguay","Brazil","Germany","Argentina"
-    ],
-    "Which team has won the African Cup of Nations a record 7 times? ":[
-    "Egypt","Cameroon","Senegal","Ghana"
-    ]
-}
+# Questions are stored in different file name Questions.toml
+#toml stands for [Tom's Obvious Minimal Language]
+import pathlib
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
+
+# variable Number_of_questions_per_quiz used to randomize the questions in quiz.
+Number_of_questions_per_quiz = 5
+QUESTIONS_PATH = pathlib.Path(__file__).parent / "Questions.toml"
+#QUESTIONS = tomllib.loads(QUESTIONS_PATH.read_text())
+
 # function restrict number of questions per Quiz
 """ prepare_questions take two argument 
     1. argument is questions
     2. argument is number of question in current quiz
     this function return K number of random questions from questions list.
 """
-def prepare_questions(questions, num_questions):
+def prepare_questions(path, num_questions):
+    questions = tomllib.loads(path.read_text())["questions"]
     num_questions = min(num_questions, len(questions))
-    return random.sample(list(questions.items()), k=num_questions)
+    return random.sample(questions, k=num_questions)
 
 """ get_answer function take 2 argument 
     1. argument is question from the quiz and 
@@ -64,11 +58,12 @@ def get_answer(question,alternatives):
    
 """
 
-def ask_question(question, alternatives):
-    correct_answer = alternatives[0]
+def ask_question(question):
+    correct_answer = question["answer"]
+    alternatives = [question["answer"]] + question["alternatives"]
     ordered_alternatives = random.sample(alternatives, k=len(alternatives))
 
-    answer = get_answer(question, ordered_alternatives)
+    answer = get_answer(question["question"], ordered_alternatives)
     if answer == correct_answer:
         print("⭐ Correct! ⭐")
         return 1
@@ -82,13 +77,13 @@ def ask_question(question, alternatives):
 
 def run_quiz():
     questions = prepare_questions(
-        QUESTIONS, num_questions=Number_of_questions_per_quiz
+        QUESTIONS_PATH, num_questions=Number_of_questions_per_quiz
     )
 
     num_correct = 0
-    for num, (question, alternatives) in enumerate(questions, start=1):
+    for num, question in enumerate(questions, start=1):
         print(f"\nQuestion {num}:")
-        num_correct += ask_question(question, alternatives)
+        num_correct += ask_question(question)
 
     print(f"\nYou got {num_correct} correct out of {num} questions")
 
